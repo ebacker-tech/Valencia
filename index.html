@@ -13,29 +13,15 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --cream: #f5efe6;
-    --ink: #1a1208;
-    --terracotta: #c45c2e;
-    --gold: #d4a843;
-    --sage: #7a8c6e;
-    --warm-gray: #8c7d6e;
-    --card-bg: #faf6f0;
-    --line: rgba(26,18,8,0.12);
-    --done-bg: rgba(122,140,110,0.1);
+    --cream: #f5efe6; --ink: #1a1208; --terracotta: #c45c2e;
+    --gold: #d4a843; --sage: #7a8c6e; --warm-gray: #8c7d6e;
+    --card-bg: #faf6f0; --line: rgba(26,18,8,0.12); --done-bg: rgba(122,140,110,0.1);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
   body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--ink); min-height: 100vh; overflow-x: hidden; }
 
-  header {
-    position: relative; background: var(--ink); color: var(--cream);
-    padding: 56px 24px 32px; overflow: hidden;
-  }
-  header::before {
-    content: ''; position: absolute; inset: 0;
-    background:
-      radial-gradient(ellipse 60% 80% at 80% 20%, rgba(212,168,67,0.18) 0%, transparent 60%),
-      radial-gradient(ellipse 50% 60% at 10% 90%, rgba(196,92,46,0.15) 0%, transparent 55%);
-  }
+  header { position: relative; background: var(--ink); color: var(--cream); padding: 56px 24px 32px; overflow: hidden; }
+  header::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 80% at 80% 20%, rgba(212,168,67,0.18) 0%, transparent 60%), radial-gradient(ellipse 50% 60% at 10% 90%, rgba(196,92,46,0.15) 0%, transparent 55%); }
   .header-inner { position: relative; z-index: 1; }
   .city-label { font-size: 11px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
   header h1 { font-family: 'Playfair Display', serif; font-size: clamp(38px, 10vw, 56px); font-weight: 400; line-height: 1; margin-bottom: 4px; }
@@ -46,19 +32,9 @@
   .progress-bar-inner { height: 100%; background: linear-gradient(90deg, var(--terracotta), var(--gold)); border-radius: 2px; transition: width 0.6s cubic-bezier(0.4,0,0.2,1); width: 0%; }
   .progress-label { font-size: 12px; color: rgba(245,239,230,0.6); white-space: nowrap; min-width: 60px; text-align: right; }
 
-  .tab-nav {
-    position: sticky; top: 0; z-index: 100; background: var(--ink);
-    display: flex; overflow-x: auto; scrollbar-width: none;
-    border-bottom: 1px solid rgba(245,239,230,0.08); padding: 0 16px;
-    -webkit-overflow-scrolling: touch;
-  }
+  .tab-nav { position: sticky; top: 0; z-index: 100; background: var(--ink); display: flex; overflow-x: auto; scrollbar-width: none; border-bottom: 1px solid rgba(245,239,230,0.08); padding: 0 16px; -webkit-overflow-scrolling: touch; }
   .tab-nav::-webkit-scrollbar { display: none; }
-  .tab-btn {
-    flex-shrink: 0; padding: 14px 16px; background: none; border: none; cursor: pointer;
-    font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 500;
-    letter-spacing: 0.08em; text-transform: uppercase; color: rgba(245,239,230,0.4);
-    transition: color 0.2s; position: relative; white-space: nowrap;
-  }
+  .tab-btn { flex-shrink: 0; padding: 14px 16px; background: none; border: none; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(245,239,230,0.4); transition: color 0.2s; position: relative; white-space: nowrap; }
   .tab-btn.active { color: var(--cream); }
   .tab-btn.active::after { content: ''; position: absolute; bottom: 0; left: 16px; right: 16px; height: 2px; background: var(--gold); border-radius: 1px; }
   .tab-dot { display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: var(--terracotta); margin-left: 5px; vertical-align: middle; opacity: 0; transition: opacity 0.2s; }
@@ -78,23 +54,14 @@
   .day-progress-text { font-size: 11px; color: var(--warm-gray); white-space: nowrap; }
 
   .stops-list { padding: 8px 16px 16px; }
-  .stop-card {
-    background: var(--card-bg); border: 1px solid var(--line); border-radius: 12px;
-    margin-top: 10px; overflow: hidden; transition: transform 0.15s ease, opacity 0.3s ease;
-    cursor: pointer; -webkit-user-select: none; user-select: none;
-  }
+  .stop-card { background: var(--card-bg); border: 1px solid var(--line); border-radius: 12px; margin-top: 10px; overflow: hidden; transition: transform 0.15s ease, opacity 0.3s ease; cursor: pointer; -webkit-user-select: none; user-select: none; }
   .stop-card:active { transform: scale(0.985); }
   .stop-card.done { background: var(--done-bg); border-color: rgba(122,140,110,0.2); }
   .stop-card.done .stop-name { text-decoration: line-through; color: var(--warm-gray); }
   .stop-card.done .stop-type, .stop-card.done .stop-notes { opacity: 0.5; }
 
   .stop-inner { display: flex; align-items: flex-start; gap: 14px; padding: 16px; }
-  .stop-check {
-    flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%;
-    border: 1.5px solid var(--line); background: white;
-    display: flex; align-items: center; justify-content: center;
-    transition: all 0.2s ease; margin-top: 1px;
-  }
+  .stop-check { flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid var(--line); background: white; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; margin-top: 1px; }
   .stop-card.done .stop-check { background: var(--sage); border-color: var(--sage); }
   .stop-check svg { display: none; }
   .stop-card.done .stop-check svg { display: block; }
@@ -177,19 +144,19 @@ const DAYS = [
   },
   {
     id: 'monday', label: 'Monday',
-    title: 'Bombas Gens, Turia & the Arts Complex',
+    title: 'Bellas Artes, Turia & the Arts Complex',
     day: 'All Day Monday',
-    narrative: 'Start at Bombas Gens in the north, then follow the Jardín del Turia east all the way to Ciudad de las Artes y las Ciencias.',
+    narrative: 'Start at the Museo de Bellas Artes — one of Spain\'s finest free museums, right on the Turia. Follow the riverbed east to Mercado de Colón and finish with golden hour at the City of Arts and Sciences.',
     tips: [
-      { label: 'Bombas Gens', text: 'Open Mondays 10am–9pm. <strong>Free</strong> for main halls.' },
-      { label: 'Turia Park', text: 'Rent a <strong>ValenBisi bike</strong> — connects Bombas Gens straight to the arts complex.' },
-      { label: 'Ciudad de las Artes', text: 'Arrive at <strong>golden hour</strong> for Calatrava\'s architecture. Free to wander outside.' },
+      { label: 'Bellas Artes', text: '<strong>Open Mondays 10am–8pm. Free.</strong> Home to Sorolla, Goya, and the world\'s best Valencian painting collection.' },
+      { label: 'Turia Park', text: 'Rent a <strong>ValenBisi bike</strong> — the museum is right at the park\'s edge. Ride east to the arts complex.' },
+      { label: 'Ciudad de las Artes', text: 'Arrive at <strong>golden hour</strong> for the best light on Calatrava\'s architecture. Free to wander outside.' },
     ],
     stops: [
-      { id: 'm1', time: '10:00 AM', name: 'Bombas Gens Centro de Artes Digitales', type: 'gallery', typeLabel: 'Digital Art', notes: 'Immersive digital art in a converted hydraulics factory. Free for main halls. Give it a full 2 hours.' },
-      { id: 'm2', time: '12:30 PM', name: 'Jardín del Turia', type: 'nature', typeLabel: 'Park', notes: 'Walk or rent a ValenBisi bike east through the old riverbed. Grab lunch supplies before you leave Bombas Gens.' },
-      { id: 'm3', time: '2:30 PM', name: 'Mercado de Colón', type: 'market', typeLabel: 'Market', notes: 'Stunning Art Nouveau market in the Eixample. Open until 9pm — ideal afternoon coffee or glass of wine.' },
-      { id: 'm4', time: '4:30 PM', name: 'Ciudad de las Artes y las Ciencias', type: 'landmark', typeLabel: 'Complex', notes: 'Arrive at golden hour for the best light. Free to wander the grounds. Book ahead for Oceanogràfic or Science Museum.' },
+      { id: 'm1', time: '10:00 AM', name: 'Museo de Bellas Artes San Pío V', type: 'museum', typeLabel: 'Museum', notes: 'Open Mondays 10am–8pm. Free. One of Spain\'s best collections — Sorolla, Goya, El Greco, and a superb Valencian painting gallery. Allow 2 hours.' },
+      { id: 'm2', time: '12:30 PM', name: 'Jardín del Turia', type: 'nature', typeLabel: 'Park', notes: 'The museum sits right at the park entrance. Walk or bike east along the old riverbed — grab lunch nearby before you go.' },
+      { id: 'm3', time: '2:30 PM', name: 'Mercado de Colón', type: 'market', typeLabel: 'Market', notes: 'Stunning Art Nouveau market in the Eixample. Open Mondays until 9pm — ideal afternoon coffee or glass of wine.' },
+      { id: 'm4', time: '4:30 PM', name: 'Ciudad de las Artes y las Ciencias', type: 'landmark', typeLabel: 'Complex', notes: 'Arrive at golden hour for the best light. Free to wander the grounds. Book Oceanogràfic or Science Museum ahead if you want to go inside.' },
     ]
   },
   {
@@ -200,20 +167,21 @@ const DAYS = [
     tips: [
       { label: 'IVAM', text: 'Open Tues 10am–7pm. Check <strong>current entry fee</strong> on ivam.es.' },
       { label: 'La Llotgeta', text: '<strong>Free photography</strong> exhibitions, open Tuesdays. 10-min walk from IVAM.' },
-      { label: 'Albufera', text: '<strong>Bus 25</strong> to El Palmar (~30 mins). Book sunset boat trip (~€5) in advance.' },
+      { label: 'Albufera timing', text: '<strong>Go in the afternoon</strong> — the sunset boat trip is the centrepiece. Arrive El Palmar by 4pm at the latest.' },
+      { label: 'Getting there', text: '<strong>Bus 25</strong> from city centre to El Palmar (~30 mins). Book boat trip (~€5) in advance if possible.' },
     ],
     stops: [
       { id: 't1', time: '9:30 AM', name: 'Malvarrosa Beach', type: 'beach', typeLabel: 'Beach', notes: 'Start with the beach while it\'s quiet. Easy by bus or ValenBisi bike from the city centre.' },
-      { id: 't2', time: '11:30 AM', name: 'IVAM — Art Modern Institute Museum', type: 'museum', typeLabel: 'Museum', notes: 'Open Tuesdays 10am–7pm. Contemporary art spanning painting, photography, and installation.' },
-      { id: 't3', time: '1:30 PM', name: 'La Llotgeta Centro Fotográfico', type: 'gallery', typeLabel: 'Photography', notes: 'Free photography-only exhibition space, open Tuesdays. A 10-minute walk from IVAM.' },
-      { id: 't4', time: '4:00 PM', name: 'Parque Natural de la Albufera', type: 'nature', typeLabel: 'Nature', notes: 'Bus 25 to El Palmar (~30 mins). Book a sunset boat trip (~€5). Eat paella here — it was invented in this village.' },
+      { id: 't2', time: '11:30 AM', name: 'IVAM — Art Modern Institute Museum', type: 'museum', typeLabel: 'Museum', notes: 'Open Tuesdays 10am–7pm. Contemporary art spanning painting, photography, and installation. Check current entry fee on ivam.es.' },
+      { id: 't3', time: '1:30 PM', name: 'La Llotgeta Centro Fotográfico', type: 'gallery', typeLabel: 'Photography', notes: 'Free photography-only exhibition space, open Tuesdays. A 10-minute walk from IVAM — don\'t miss it.' },
+      { id: 't4', time: '4:00 PM', name: 'Parque Natural de la Albufera', type: 'nature', typeLabel: 'Nature', notes: 'Afternoon visit is best — sunset boat trip from the pier at Mirador Pujol is the highlight. Give your name to the boatman before heading off to reserve a seat. Eat paella in El Palmar.' },
     ]
   },
   {
     id: 'friday', label: 'Friday',
     title: 'CAHH & Barrio del Carmen',
     day: 'All Day Friday',
-    narrative: 'The day for the best contemporary art in the city. CAHH is unhurried, the collection is world-class, and Barrio del Carmen fills the afternoon.',
+    narrative: 'The day for the best contemporary art in the city. CAHH is unhurried, the collection is world-class, and Barrio del Carmen fills the rest of the afternoon.',
     tips: [
       { label: 'CAHH', text: 'Open Fridays 10am–8pm. <strong>Book tickets</strong> at cahh.es (~€10). Allow 2 full hours.' },
       { label: 'Aleksandra Istorik', text: 'Opens <strong>12–2pm and 5–8pm</strong> on Fridays — plan around these windows.' },
@@ -231,7 +199,7 @@ const DAYS = [
   }
 ];
 
-const STORAGE_KEY = 'valencia-itinerary-v1';
+const STORAGE_KEY = 'valencia-itinerary-v2';
 let checked = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
 let activeDay = DAYS[0].id;
 
@@ -250,10 +218,9 @@ function updateDayBar(dayId) {
   const day = DAYS.find(d => d.id === dayId);
   if (!day) return;
   const { done, total } = dayProgress(day);
-  const pct = total ? done/total*100 : 0;
   const fill = document.querySelector(`#day-${dayId} .day-progress-fill`);
   const text = document.querySelector(`#day-${dayId} .day-progress-text`);
-  if (fill) fill.style.width = pct + '%';
+  if (fill) fill.style.width = (total ? done/total*100 : 0) + '%';
   if (text) text.textContent = `${done}/${total} stops`;
   const banner = document.querySelector(`#day-${dayId} .completion-banner`);
   if (banner) banner.classList.toggle('show', done === total && total > 0);
@@ -356,8 +323,7 @@ renderAll();
 
 if ('serviceWorker' in navigator) {
   const sw = `const C='valencia-v2';self.addEventListener('install',e=>e.waitUntil(caches.open(C).then(c=>c.addAll(['/']))));self.addEventListener('fetch',e=>e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request))));`;
-  const blob = new Blob([sw], { type: 'application/javascript' });
-  navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(() => {});
+  navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw], {type:'application/javascript'}))).catch(()=>{});
 }
 </script>
 </body>
