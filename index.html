@@ -16,7 +16,7 @@
     --cream: #f5efe6; --ink: #1a1208; --terracotta: #c45c2e;
     --gold: #d4a843; --sage: #7a8c6e; --warm-gray: #8c7d6e;
     --card-bg: #faf6f0; --line: rgba(26,18,8,0.12); --done-bg: rgba(122,140,110,0.1);
-    --book-accent: #7a4a2e;
+    --book-accent: #7a4a2e; --vintage-accent: #6a3a6a;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
   body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--ink); min-height: 100vh; overflow-x: hidden; }
@@ -56,18 +56,19 @@
 
   .stops-list { padding: 8px 16px 16px; }
 
-  /* section label between stops */
-  .stop-section-label { font-size: 10px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--warm-gray); margin: 18px 0 4px; opacity: 0.7; }
-
   .stop-card { background: var(--card-bg); border: 1px solid var(--line); border-radius: 12px; margin-top: 8px; overflow: hidden; transition: transform 0.15s ease; cursor: pointer; -webkit-user-select: none; user-select: none; }
   .stop-card:active { transform: scale(0.985); }
   .stop-card.done { background: var(--done-bg); border-color: rgba(122,140,110,0.2); }
   .stop-card.done .stop-name { text-decoration: line-through; color: var(--warm-gray); }
   .stop-card.done .stop-type, .stop-card.done .stop-notes, .stop-card.done .stop-hours { opacity: 0.5; }
 
-  /* bookshop cards get a left accent stripe */
-  .stop-card.is-bookshop { border-left: 3px solid rgba(122,74,46,0.35); }
+  /* bookshop stripe */
+  .stop-card.is-bookshop { border-left: 3px solid rgba(122,74,46,0.4); }
   .stop-card.is-bookshop.done { border-left-color: rgba(122,140,110,0.3); }
+
+  /* vintage stripe */
+  .stop-card.is-vintage { border-left: 3px solid rgba(106,58,106,0.4); }
+  .stop-card.is-vintage.done { border-left-color: rgba(122,140,110,0.3); }
 
   .stop-inner { display: flex; align-items: flex-start; gap: 14px; padding: 16px; }
   .stop-check { flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid var(--line); background: white; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; margin-top: 1px; }
@@ -83,7 +84,6 @@
   .stop-notes { font-size: 12.5px; color: var(--warm-gray); line-height: 1.55; margin-top: 8px; font-weight: 300; border-top: 1px solid var(--line); padding-top: 10px; }
   .stop-hours { font-size: 11px; color: var(--sage); margin-top: 6px; }
 
-  /* type colors */
   .type-museum .stop-type { color: #7a5c8c; }
   .type-market .stop-type { color: var(--terracotta); }
   .type-food .stop-type { color: #b8860b; }
@@ -92,6 +92,7 @@
   .type-gallery .stop-type { color: #4a6fa5; }
   .type-beach .stop-type { color: #3a8fa5; }
   .type-bookshop .stop-type { color: var(--book-accent); }
+  .type-vintage .stop-type { color: var(--vintage-accent); }
 
   .tips-section { margin: 0 16px 4px; padding: 16px; background: rgba(212,168,67,0.08); border: 1px solid rgba(212,168,67,0.2); border-radius: 12px; }
   .tips-label { font-size: 10px; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
@@ -139,91 +140,98 @@ const DAYS = [
     id: 'sunday', label: 'Sunday',
     title: 'Old Town Wander',
     day: 'Sunday Afternoon',
-    narrative: 'A relaxed 2–3 hour loop through Ciutat Vella. Medieval core at its most atmospheric in late afternoon light — with a detour into one of the city\'s finest antiquarian bookshops.',
+    narrative: 'A relaxed 2–3 hour loop through Ciutat Vella — bookshops, vintage, horchata, and the cathedral quarter at its most atmospheric.',
     tips: [
-      { label: 'Central Market', text: '<strong>Closed Sundays</strong> — admire the Art Nouveau facade only.' },
       { label: 'La Lonja', text: '<strong>Closes 2pm Sundays</strong> — exterior only if arriving after.' },
-      { label: 'El Micalet', text: '<strong>Closes 5:45pm</strong> — aim to be inside by 4:30pm at the latest.' },
-      { label: 'El Asilo del Libro', text: 'The <strong>only bookshop open Sundays</strong> (11am–3pm) — on the same street as La Lonja.' },
+      { label: 'El Micalet', text: '<strong>Closes 5:45pm</strong> — be inside by 4:30pm at the latest.' },
+      { label: 'El Asilo del Libro', text: 'Only bookshop open Sundays — <strong>closes 3pm</strong>, so go early in your walk.' },
+      { label: 'Mon Petit Secret', text: '<strong>Closed Sundays</strong> — catch it Monday or Friday instead.' },
     ],
     stops: [
       { id: 's1', time: '2:30 PM', name: 'La Lonja de la Seda', type: 'landmark', typeLabel: 'Landmark', notes: 'Closed inside on Sundays but the Gothic exterior is extraordinary. One of the finest medieval buildings in Europe.' },
       { id: 's2', time: '2:45 PM', name: 'Central Market (exterior)', type: 'market', typeLabel: 'Market', notes: 'Closed Sundays — the Art Nouveau facade is stunning. Right next door to La Lonja.' },
-      { id: 'b5', time: '~3:00 PM', name: 'El Asilo del Libro', type: 'bookshop', typeLabel: '📚 Antique Books & Maps', isBookshop: true, notes: 'Antique books and maps on the same street as La Lonja — the only bookshop open Sundays (11am–3pm). Described as a rare find and treasure trove. Don\'t linger too long — it closes at 3pm.', hours: 'Sun 11am–3pm only' },
-      { id: 's3', time: '3:00 PM', name: 'Horchatería de Santa Catalina', type: 'food', typeLabel: 'Café', notes: 'Order horchata con fartons — the essential Valencia afternoon stop. Open until 9pm.' },
-      { id: 's4', time: '3:30 PM', name: 'Plaza de la Virgen', type: 'landmark', typeLabel: 'Square', notes: 'The cathedral square — beautiful in afternoon light. Wander freely.' },
-      { id: 's5', time: '3:50 PM', name: 'El Micalet', type: 'landmark', typeLabel: 'Tower', notes: 'Climb the cathedral bell tower for panoramic views. €3. Closes 5:45pm — be inside by 4:30.' },
-      { id: 'b4', time: 'After 5pm', name: 'La Guarida de las Maravillas', type: 'bookshop', typeLabel: '📚 Secondhand & Curiosities', isBookshop: true, notes: 'Secondhand books, vinyl, and curiosities — steps from El Micalet. Opens again at 5pm on Sundays. Charming interior that transports you back in time.', hours: 'Closed Sundays — skip this one, catch it Mon–Sat instead.' },
-      { id: 's6', time: '4:45 PM', name: 'Plaça de l\'Ajuntament', type: 'landmark', typeLabel: 'Square', notes: 'End the afternoon at the main civic square. Plenty of bars for aperitivo hour before dinner.' },
+      { id: 'b5', time: '~2:50 PM', name: 'El Asilo del Libro', type: 'bookshop', typeLabel: '📚 Antique Books & Maps', isBookshop: true, notes: 'Antique books and maps on the same street as La Lonja — the only bookshop open Sundays. Closes 3pm so make it your first stop after La Lonja.', hours: 'Sun 11am–3pm' },
+      { id: 'v3', time: '~3:00 PM', name: 'La Señora Henderson', type: 'vintage', typeLabel: '🪡 Vintage', isVintage: true, notes: 'Levi\'s and quality secondhand clothing, fair prices. Steps from El Micalet — one of the few vintage shops open on Sundays.', hours: 'Mon–Sat 12–8pm · Sun 12–2pm' },
+      { id: 'v4', time: '~3:15 PM', name: 'Meoradi Vintage Centro', type: 'vintage', typeLabel: '🪡 Vintage', isVintage: true, notes: 'High-quality natural materials, beautifully curated (4.8 ⭐). In Barrio del Carmen. Open Sundays 12–4pm — one of the few to catch on this day.', hours: 'Tue–Sat 12–8pm · Sun 12–4pm · Closed Mon' },
+      { id: 's3', time: '3:30 PM', name: 'Horchatería de Santa Catalina', type: 'food', typeLabel: 'Café', notes: 'Order horchata con fartons — the essential Valencia afternoon stop. Open until 9pm.' },
+      { id: 's4', time: '4:00 PM', name: 'Plaza de la Virgen', type: 'landmark', typeLabel: 'Square', notes: 'The cathedral square — beautiful in afternoon light. Wander freely.' },
+      { id: 's5', time: '4:15 PM', name: 'El Micalet', type: 'landmark', typeLabel: 'Tower', notes: 'Climb the cathedral bell tower for panoramic views. €3. Closes 5:45pm — be inside by 4:30.' },
+      { id: 's6', time: '5:15 PM', name: 'Plaça de l\'Ajuntament', type: 'landmark', typeLabel: 'Square', notes: 'End the afternoon at the main civic square. Plenty of bars for aperitivo hour before dinner.' },
     ]
   },
   {
     id: 'monday', label: 'Monday',
     title: 'Bellas Artes, Turia & the Arts Complex',
     day: 'All Day Monday',
-    narrative: 'Start in Ciutat Vella for the antiquarian bookshops (morning only), head to Bellas Artes, walk the Turia east, browse Railowsky near Mercado de Colón, and finish at golden hour with Calatrava.',
+    narrative: 'Start in Ciutat Vella for antiquarian bookshops and the city\'s best vintage boutiques. Head to Bellas Artes, walk the Turia east, then Railowsky and golden hour at Calatrava.',
     tips: [
-      { label: 'Bellas Artes', text: '<strong>Open Mondays 10am–8pm. Free.</strong> Sorolla, Goya, El Greco and the best Valencian painting collection.' },
-      { label: 'Rafael Solaz & El Asilo', text: 'Both <strong>open weekday mornings only</strong> (close ~1:30–2pm). Hit them first before Bellas Artes.' },
-      { label: 'Railowsky', text: 'In the Eixample, <strong>right near Mercado de Colón</strong>. Open Mon 10am–2pm & 5–8:30pm.' },
-      { label: 'La Guarida', text: 'In Ciutat Vella near La Lonja. <strong>Open Mondays</strong> 10:30am–2pm & 5–9pm.' },
+      { label: 'Mon Petit Secret', text: '⭐ 5.0 — luxury designer vintage on Plaza del Mercat. <strong>Do not miss.</strong> Open Mon 11am–7:30pm.' },
+      { label: 'Rafael Solaz & El Asilo', text: '<strong>Morning only</strong> — close around 1:30–2pm. Hit these first.' },
+      { label: 'Bellas Artes', text: '<strong>Open Mondays 10am–8pm. Free.</strong> Sorolla, Goya, El Greco.' },
+      { label: 'Railowsky', text: 'Near Mercado de Colón. Open Mon 10am–2pm & 5–8:30pm.' },
     ],
     stops: [
-      { id: 'b3', time: '10:00 AM', name: 'Libería Anticuaria Rafael Solaz', type: 'bookshop', typeLabel: '📚 Antiquarian', isBookshop: true, notes: 'Feels like the library of an old magician — atmospheric antique bookshop in Ciutat Vella. Weekday mornings only.', hours: 'Mon–Fri 10am–1:30pm · Closed Sat & Sun' },
-      { id: 'b5b', time: '10:30 AM', name: 'El Asilo del Libro', type: 'bookshop', typeLabel: '📚 Antique Books & Maps', isBookshop: true, notes: 'Same street as Rafael Solaz — easy to combine. Antique books and maps, treasure trove of rare finds.', hours: 'Mon–Sat 9am–2pm & 5–9pm' },
-      { id: 'b4b', time: '11:00 AM', name: 'La Guarida de las Maravillas', type: 'bookshop', typeLabel: '📚 Secondhand & Curiosities', isBookshop: true, notes: 'Secondhand books, vinyl, and curiosities a short walk away in Ciutat Vella. Charming and worth a browse.', hours: 'Mon–Sat 10:30am–2pm & 5–9pm' },
-      { id: 'm1', time: '12:00 PM', name: 'Museo de Bellas Artes San Pío V', type: 'museum', typeLabel: 'Museum', notes: 'Open Mondays 10am–8pm. Free. Sorolla, Goya, El Greco, and a superb Valencian painting gallery. Allow 2 hours.' },
-      { id: 'm2', time: '2:30 PM', name: 'Jardín del Turia', type: 'nature', typeLabel: 'Park', notes: 'The museum sits right at the park entrance. Walk or bike east along the old riverbed — grab lunch nearby before you go.' },
-      { id: 'm3', time: '3:30 PM', name: 'Mercado de Colón', type: 'market', typeLabel: 'Market', notes: 'Stunning Art Nouveau market in the Eixample. Open Mondays until 9pm — ideal afternoon coffee or glass of wine.' },
-      { id: 'b1b', time: '4:00 PM', name: 'Railowsky', type: 'bookshop', typeLabel: '📚 Photography & Art Books', isBookshop: true, notes: 'Specialty in photography, analog, art, and architecture. Out-of-print and Valencian photographer titles. Gallery at the back. A few minutes\' walk from Mercado de Colón.', hours: 'Mon–Fri 10am–2pm & 5–8:30pm' },
-      { id: 'm4', time: '5:00 PM', name: 'Ciudad de las Artes y las Ciencias', type: 'landmark', typeLabel: 'Complex', notes: 'Arrive at golden hour for the best light on Calatrava\'s architecture. Free to wander the grounds. Book Oceanogràfic or Science Museum ahead if you want to go inside.' },
+      { id: 'b3', time: '10:00 AM', name: 'Libería Anticuaria Rafael Solaz', type: 'bookshop', typeLabel: '📚 Antiquarian', isBookshop: true, notes: 'Feels like the library of an old magician. Weekday mornings only — go first before anything else.', hours: 'Mon–Fri 10am–1:30pm only' },
+      { id: 'b5b', time: '10:30 AM', name: 'El Asilo del Libro', type: 'bookshop', typeLabel: '📚 Antique Books & Maps', isBookshop: true, notes: 'Same street as Rafael Solaz — easy to combine. Antique books, maps, rare finds.', hours: 'Mon–Sat 9am–2pm & 5–9pm' },
+      { id: 'v1', time: '11:00 AM', name: 'Mon Petit Secret… vintage', type: 'vintage', typeLabel: '🪡 Luxury Vintage', isVintage: true, notes: '⭐ 5.0 with 570 reviews — one of the finest vintage boutiques in Valencia. Saint Laurent blazers, luxury handbags, jewellery. On Plaza del Mercat, steps from La Lonja. Women\'s only.', hours: 'Mon, Wed–Fri 11am–7:30pm · Closed Tue, Sat, Sun' },
+      { id: 'b4b', time: '11:45 AM', name: 'La Guarida de las Maravillas', type: 'bookshop', typeLabel: '📚 Secondhand & Curiosities', isBookshop: true, notes: 'Secondhand books, vinyl, and curiosities. Charming interior — a short walk from Plaza del Mercat.', hours: 'Mon–Sat 10:30am–2pm & 5–9pm' },
+      { id: 'v2', time: '12:15 PM', name: 'Santo Spirito Vintage', type: 'vintage', typeLabel: '🪡 Vintage', isVintage: true, notes: 'Denim paradise — 80s/90s/00s jeans, jackets, Lacoste, great prices. In Barrio del Carmen. Open Mondays.', hours: 'Mon–Sat 11:30am–2:30pm & 5–9pm' },
+      { id: 'm1', time: '1:00 PM', name: 'Museo de Bellas Artes San Pío V', type: 'museum', typeLabel: 'Museum', notes: 'Open Mondays 10am–8pm. Free. Sorolla, Goya, El Greco, and a superb Valencian painting gallery. Allow 2 hours.' },
+      { id: 'm2', time: '3:00 PM', name: 'Jardín del Turia', type: 'nature', typeLabel: 'Park', notes: 'The museum sits right at the park entrance. Walk or bike east along the old riverbed.' },
+      { id: 'm3', time: '4:00 PM', name: 'Mercado de Colón', type: 'market', typeLabel: 'Market', notes: 'Stunning Art Nouveau market in the Eixample. Open until 9pm — ideal afternoon coffee or glass of wine.' },
+      { id: 'b1b', time: '4:30 PM', name: 'Railowsky', type: 'bookshop', typeLabel: '📚 Photography & Art Books', isBookshop: true, notes: 'Photography, analog, art, and architecture books. Out-of-print and Valencian titles. Gallery at the back. A few minutes from Mercado de Colón.', hours: 'Mon–Fri 10am–2pm & 5–8:30pm' },
+      { id: 'm4', time: '5:30 PM', name: 'Ciudad de las Artes y las Ciencias', type: 'landmark', typeLabel: 'Complex', notes: 'Arrive at golden hour for the best light on Calatrava\'s architecture. Free to wander the grounds.' },
     ]
   },
   {
     id: 'tuesday', label: 'Tuesday',
     title: 'IVAM, Photography & the Albufera',
     day: 'All Day Tuesday',
-    narrative: 'Morning at Malvarrosa, then IVAM and the photography space nearby. Slot in Ramon Llull (Barrio del Carmen) and Railowsky (Eixample) before heading south to the Albufera for sunset.',
+    narrative: 'Beach, then IVAM and the photography space. Barrio del Carmen for Ramon Llull, Meoradi, and Railowsky — then south to the Albufera for sunset.',
     tips: [
       { label: 'IVAM', text: 'Open Tues 10am–7pm. Check <strong>current entry fee</strong> on ivam.es.' },
-      { label: 'La Llotgeta', text: '<strong>Free photography</strong> exhibitions, open Tuesdays. 10-min walk from IVAM.' },
-      { label: 'Ramon Llull', text: 'In Barrio del Carmen, <strong>near IVAM</strong>. Open Tue 11am–2pm & 5–8:30pm.' },
-      { label: 'Albufera', text: '<strong>Go in the afternoon</strong> — sunset boat trip is the centrepiece. Bus 25 to El Palmar (~30 mins).' },
+      { label: 'Meoradi', text: 'Beautifully curated vintage in Barrio del Carmen. <strong>Open Tuesdays 12–8pm.</strong>' },
+      { label: 'Ramon Llull', text: 'Near IVAM in Barrio del Carmen. Open Tue 11am–2pm & 5–8:30pm.' },
+      { label: 'Albufera', text: '<strong>Afternoon only</strong> — sunset boat trip is the centrepiece. Bus 25 to El Palmar (~30 mins).' },
     ],
     stops: [
       { id: 't1', time: '9:30 AM', name: 'Malvarrosa Beach', type: 'beach', typeLabel: 'Beach', notes: 'Start with the beach while it\'s quiet. Easy by bus or ValenBisi bike from the city centre.' },
-      { id: 't2', time: '11:30 AM', name: 'IVAM — Art Modern Institute Museum', type: 'museum', typeLabel: 'Museum', notes: 'Open Tuesdays 10am–7pm. Contemporary art spanning painting, photography, and installation. Check current entry fee on ivam.es.' },
-      { id: 't3', time: '1:30 PM', name: 'La Llotgeta Centro Fotográfico', type: 'gallery', typeLabel: 'Photography', notes: 'Free photography-only exhibition space, open Tuesdays. A 10-minute walk from IVAM.' },
-      { id: 'b2b', time: '2:00 PM', name: 'Llibreria Ramon Llull', type: 'bookshop', typeLabel: '📚 Independent Bookshop', isBookshop: true, notes: 'Widely considered the best bookshop in Valencia (4.8 ⭐). In Barrio del Carmen, a short walk from IVAM. Strong on Spanish poetry and independent publishers.', hours: 'Tue–Sat 11am–2pm & 5–8:30pm' },
-      { id: 'b1c', time: '2:30 PM', name: 'Railowsky', type: 'bookshop', typeLabel: '📚 Photography & Art Books', isBookshop: true, notes: 'Photography, analog, art, and architecture books — out-of-print and Valencian titles. Gallery at the back. In the Eixample, a short ride from Barrio del Carmen.', hours: 'Mon–Fri 10am–2pm & 5–8:30pm' },
-      { id: 't4', time: '4:00 PM', name: 'Parque Natural de la Albufera', type: 'nature', typeLabel: 'Nature', notes: 'Afternoon visit is best — sunset boat trip from the pier at Mirador Pujol is the highlight. Give your name to the boatman before heading off. Eat paella in El Palmar.' },
+      { id: 't2', time: '11:30 AM', name: 'IVAM — Art Modern Institute Museum', type: 'museum', typeLabel: 'Museum', notes: 'Open Tuesdays 10am–7pm. Contemporary art spanning painting, photography, and installation.' },
+      { id: 't3', time: '1:15 PM', name: 'La Llotgeta Centro Fotográfico', type: 'gallery', typeLabel: 'Photography', notes: 'Free photography-only exhibition space, open Tuesdays. A 10-minute walk from IVAM.' },
+      { id: 'b2b', time: '1:45 PM', name: 'Llibreria Ramon Llull', type: 'bookshop', typeLabel: '📚 Independent Bookshop', isBookshop: true, notes: 'Widely considered the best bookshop in Valencia (4.8 ⭐). In Barrio del Carmen, a short walk from IVAM. Strong on Spanish poetry and independent publishers.', hours: 'Tue–Sat 11am–2pm & 5–8:30pm' },
+      { id: 'v5', time: '2:00 PM', name: 'Meoradi Vintage Centro', type: 'vintage', typeLabel: '🪡 Vintage', isVintage: true, notes: 'High-quality natural materials, beautifully curated (4.8 ⭐). In Barrio del Carmen near IVAM. Open Tuesdays — great to browse while you\'re in the area.', hours: 'Tue–Sat 12–8pm · Sun 12–4pm · Closed Mon' },
+      { id: 'b1c', time: '2:30 PM', name: 'Railowsky', type: 'bookshop', typeLabel: '📚 Photography & Art Books', isBookshop: true, notes: 'Photography, analog, art, architecture books. Out-of-print and Valencian titles. Gallery at the back. Short ride from Barrio del Carmen into the Eixample.', hours: 'Mon–Fri 10am–2pm & 5–8:30pm' },
+      { id: 't4', time: '4:00 PM', name: 'Parque Natural de la Albufera', type: 'nature', typeLabel: 'Nature', notes: 'Afternoon is best — sunset boat trip from Mirador Pujol is the highlight. Give your name to the boatman before heading off. Eat paella in El Palmar.' },
     ]
   },
   {
     id: 'friday', label: 'Friday',
     title: 'CAHH & Barrio del Carmen',
     day: 'All Day Friday',
-    narrative: 'The day for the best contemporary art in the city. CAHH is the centrepiece, then Aleksandra Istorik, Ramon Llull, and Railowsky fill the afternoon before a golden hour Turia stroll.',
+    narrative: 'CAHH is the centrepiece. Aleksandra Istorik and Ramon Llull are steps away. Aiaeclé and Reborn Vintage in the Eixample/Ruzafa slot in naturally near Mercado de Colón and Railowsky.',
     tips: [
       { label: 'CAHH', text: 'Open Fridays 10am–8pm. <strong>Book tickets</strong> at cahh.es (~€10). Allow 2 full hours.' },
-      { label: 'Aleksandra Istorik', text: 'Opens <strong>12–2pm and 5–8pm</strong> on Fridays — plan around these windows.' },
-      { label: 'Ramon Llull', text: 'In Barrio del Carmen, <strong>steps from CAHH</strong>. Open Fri 11am–2pm & 5–8:30pm.' },
-      { label: 'Railowsky', text: 'In the Eixample near Mercado de Colón. Open Fri 10am–2pm & 5–8:30pm.' },
+      { label: 'Aleksandra Istorik', text: 'Opens <strong>12–2pm and 5–8pm</strong> on Fridays.' },
+      { label: 'Mon Petit Secret', text: '<strong>Open Fridays 11am–7:30pm</strong> — if you didn\'t catch it Monday, today\'s your chance.' },
+      { label: 'Aiaeclé & Reborn', text: 'Both in Ruzafa near Railowsky. Open Fridays until 9pm+.' },
     ],
     stops: [
       { id: 'f1', time: '10:00 AM', name: 'Centro de Arte Hortensia Herrero (CAHH)', type: 'museum', typeLabel: 'Museum', notes: 'Kiefer, Tàpies, Hockney, TeamLab — in a stunning restored palace. ~€10. Book ahead. The highlight of the whole trip.' },
       { id: 'f2', time: '12:15 PM', name: 'Aleksandra Istorik Gallery', type: 'gallery', typeLabel: 'Gallery', notes: 'Open Fridays 12–2pm. Contemporary gallery where the artist works on-site. 5-min walk from CAHH.' },
-      { id: 'b2c', time: '12:30 PM', name: 'Llibreria Ramon Llull', type: 'bookshop', typeLabel: '📚 Independent Bookshop', isBookshop: true, notes: 'Widely considered the best bookshop in Valencia (4.8 ⭐). Steps from CAHH in Barrio del Carmen. Strong on Spanish poetry and independent publishers. Open until 2pm then again from 5pm.', hours: 'Tue–Sat 11am–2pm & 5–8:30pm' },
-      { id: 'f3', time: '2:00 PM', name: 'Barrio del Carmen wander', type: 'landmark', typeLabel: 'Neighbourhood', notes: 'Explore the Carmen\'s street art, independent shops, and medieval alleyways. Vangar is closed Fridays.' },
+      { id: 'b2c', time: '12:30 PM', name: 'Llibreria Ramon Llull', type: 'bookshop', typeLabel: '📚 Independent Bookshop', isBookshop: true, notes: 'The best bookshop in Valencia (4.8 ⭐). Steps from CAHH in Barrio del Carmen. Strong on Spanish poetry and independent publishers.', hours: 'Tue–Sat 11am–2pm & 5–8:30pm' },
+      { id: 'v6', time: '~12:45 PM', name: 'Mon Petit Secret… vintage', type: 'vintage', typeLabel: '🪡 Luxury Vintage', isVintage: true, notes: '⭐ 5.0 — luxury and designer vintage on Plaza del Mercat, in the old town near CAHH. If you missed it Monday, this is your second chance. Saint Laurent, Chanel, fine handbags.', hours: 'Mon, Wed–Fri 11am–7:30pm · Closed Tue, Sat, Sun' },
+      { id: 'f3', time: '2:00 PM', name: 'Barrio del Carmen wander', type: 'landmark', typeLabel: 'Neighbourhood', notes: 'Explore the Carmen\'s street art, independent shops, and medieval alleyways.' },
       { id: 'f4', time: '3:30 PM', name: 'Mercado de Colón', type: 'market', typeLabel: 'Market', notes: 'Open Fridays until 9pm. A lovely wind-down spot — glass of wine, good people-watching, beautiful architecture.' },
-      { id: 'b1d', time: '4:00 PM', name: 'Railowsky', type: 'bookshop', typeLabel: '📚 Photography & Art Books', isBookshop: true, notes: 'A few minutes from Mercado de Colón. Photography, analog, art, and architecture books. Out-of-print and Valencian titles. Gallery at the back. Reopens at 5pm if you\'re earlier.', hours: 'Mon–Fri 10am–2pm & 5–8:30pm · Sat 10am–2pm' },
-      { id: 'f5', time: '5:00 PM', name: 'Aleksandra Istorik Gallery (evening)', type: 'gallery', typeLabel: 'Gallery', notes: 'Returns 5–8pm Friday. Catch the evening session if you missed lunchtime.' },
-      { id: 'f6', time: '5:30 PM', name: 'Jardín del Turia — golden hour', type: 'nature', typeLabel: 'Park', notes: 'End the trip with a golden hour stroll or cycle through the riverbed park. Always open.' },
+      { id: 'b1d', time: '4:00 PM', name: 'Railowsky', type: 'bookshop', typeLabel: '📚 Photography & Art Books', isBookshop: true, notes: 'Photography, analog, art, and architecture. Out-of-print and Valencian titles. Gallery at the back. Near Mercado de Colón.', hours: 'Mon–Fri 10am–2pm & 5–8:30pm · Sat 10am–2pm' },
+      { id: 'v7', time: '4:30 PM', name: 'Aiaeclé vintage', type: 'vintage', typeLabel: '🪡 Vintage', isVintage: true, notes: 'Upcycled and reworked vintage pieces, beautifully organised (4.8 ⭐). In Ruzafa/Eixample, a short walk from Railowsky. Open until 9:30pm Fridays.', hours: 'Mon–Fri 11am–9pm · Sat 11am–9:30pm' },
+      { id: 'v8', time: '5:00 PM', name: 'Reborn Vintage Atelier', type: 'vintage', typeLabel: '🪡 Vintage', isVintage: true, notes: 'Best-reviewed thrift in Ruzafa — Levi\'s 501s, upcycled denim, local artist pieces. Next to Aiaeclé. Open Fridays until 9pm.', hours: 'Mon–Fri 11am–3pm & 5–9pm · Sat 11am–9pm' },
+      { id: 'f5', time: '5:30 PM', name: 'Aleksandra Istorik Gallery (evening)', type: 'gallery', typeLabel: 'Gallery', notes: 'Returns 5–8pm Friday. Catch the evening session if you missed lunchtime.' },
+      { id: 'f6', time: '6:00 PM', name: 'Jardín del Turia — golden hour', type: 'nature', typeLabel: 'Park', notes: 'End the trip with a golden hour stroll or cycle through the riverbed park. Always open.' },
     ]
   }
 ];
 
-const STORAGE_KEY = 'valencia-itinerary-v4';
+const STORAGE_KEY = 'valencia-itinerary-v5';
 let checked = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
 let activeDay = DAYS[0].id;
 
@@ -264,7 +272,7 @@ function toggleStop(stopId, dayId) {
 
 function confetti(el) {
   if (!el) return;
-  const colors = ['#d4a843', '#c45c2e', '#7a8c6e', '#f5efe6', '#7a4a2e'];
+  const colors = ['#d4a843', '#c45c2e', '#7a8c6e', '#f5efe6', '#7a4a2e', '#6a3a6a'];
   const rect = el.getBoundingClientRect();
   for (let i = 0; i < 12; i++) {
     const p = document.createElement('div');
@@ -276,8 +284,9 @@ function confetti(el) {
 }
 
 function renderStopCard(stop, dayId) {
+  const cls = ['stop-card', `type-${stop.type}`, stop.isBookshop ? 'is-bookshop' : '', stop.isVintage ? 'is-vintage' : '', checked[stop.id] ? 'done' : ''].filter(Boolean).join(' ');
   return `
-  <div class="stop-card type-${stop.type}${stop.isBookshop ? ' is-bookshop' : ''}${checked[stop.id] ? ' done' : ''}" id="card-${stop.id}" data-stop="${stop.id}" data-day="${dayId}">
+  <div class="${cls}" id="card-${stop.id}" data-stop="${stop.id}" data-day="${dayId}">
     <div class="stop-inner">
       <div class="stop-check">
         <svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4L4 7.5L10 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -351,7 +360,7 @@ function renderAll() { renderNav(); renderMain(); updateGlobalBar(); }
 renderAll();
 
 if ('serviceWorker' in navigator) {
-  const sw = `const C='valencia-v4';self.addEventListener('install',e=>e.waitUntil(caches.open(C).then(c=>c.addAll(['/']))));self.addEventListener('fetch',e=>e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request))));`;
+  const sw = `const C='valencia-v5';self.addEventListener('install',e=>e.waitUntil(caches.open(C).then(c=>c.addAll(['/']))));self.addEventListener('fetch',e=>e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request))));`;
   navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw], { type: 'application/javascript' }))).catch(() => {});
 }
 </script>
